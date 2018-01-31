@@ -2,6 +2,7 @@
 #include "gt.h"
 int Socket(int type)   
 {
+    struct sockaddr_in client_addr;
     const int on = 1;
     int sockfd;
     bzero(&client_addr,sizeof(client_addr));

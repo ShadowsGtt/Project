@@ -54,8 +54,8 @@ threadpool_t *threadpool_create(int thread_count, int queue_size, int flags)
     return NULL;
 }
 
-int threadpool_add(threadpool_t *pool, void (*function)(void *),
-                   void *argument, int flags)
+int threadpool_add(threadpool_t *pool, void (*function)(int ),
+                   int argument, int flags)
 {
     int err = 0;
     int next;
@@ -65,6 +65,7 @@ int threadpool_add(threadpool_t *pool, void (*function)(void *),
     }
 
     /* 必须先取得互斥锁所有权 */
+    
     if(pthread_mutex_lock(&(pool->lock)) != 0) {
         return threadpool_lock_failure;
     }
@@ -102,14 +103,11 @@ int threadpool_add(threadpool_t *pool, void (*function)(void *),
          * 如果由因为任务队列空阻塞的线程，此时会有一个被唤醒
          * 如果没有则什么都不做
          */
+        //if(pthread_cond_broadcast(&(pool->notify)) != 0) {
         if(pthread_cond_signal(&(pool->notify)) != 0) {
             err = threadpool_lock_failure;
             break;
         }
-        /*
-         * 这里用的是 do { ... } while(0) 结构
-         * 保证过程最多被执行一次，但在中间方便因为异常而跳出执行块
-         */
     } while(0);
 
     /* 释放互斥锁资源 */
@@ -119,6 +117,112 @@ int threadpool_add(threadpool_t *pool, void (*function)(void *),
 
     return err;
 }
+#if 1 
+void *threadpool_thread(void *threadpool)
+{
+    threadpool_t *pool = (threadpool_t *)threadpool;
+    threadpool_task_t task;
+    printf("%lu线程开始运行\n",pthread_self());
+    for(;;) 
+    {
+
+        pthread_mutex_lock(&(pool->lock));
+        /* 线程池开启并且没有任务可以执行,则睡眠 */
+        while(pool->count == 0 && (!pool->shutdown) )
+            pthread_cond_wait(&(pool->notify), &(pool->lock));
+
+        /* 关闭的处理 */
+        if((pool->shutdown == immediate_shutdown) ||
+           ((pool->shutdown == graceful_shutdown) &&
+            (pool->count == 0))) {
+            break;
+        }
+
+        printf("%lu线程取得%d号任务\n",pthread_self(),pool->head);
+
+        /* 取得任务队列的第一个任务 */
+        task.function = pool->queue[pool->head].function;
+        task.argument = pool->queue[pool->head].argument;
+        /* 更新 head 和 count */
+        pool->head += 1;
+        pool->head = (pool->head == pool->queue_size) ? 0 : pool->head;
+        pool->count -= 1;
+
+        printf("剩余任务:%d\n",pool->count);
+
+        pthread_mutex_unlock(&(pool->lock));
+
+
+        /* 开始运行任务 */
+        (task.function)(task.argument);
+        /* 这里一个任务运行结束 */
+        //pthread_mutex_unlock(&(pool->lock));
+    }
+
+    /* 线程将结束，更新运行线程数 */
+    pool->started--;
+
+    pthread_exit(NULL);
+    return(NULL);
+}
+#endif
+
+#if 0 
+void *threadpool_thread(void *threadpool)
+{
+    threadpool_t *pool = (threadpool_t *)threadpool;
+    threadpool_task_t task;
+restart:
+    for(;;) {
+        /* Lock must be taken to wait on conditional variable */
+        /* 取得互斥锁资源 */
+        pthread_mutex_lock(&(pool->lock));
+
+        /* Wait on condition variable, check for spurious wakeups.
+           When returning from pthread_cond_wait(), we own the lock. */
+        /* 用 while 是为了在唤醒时重新检查条件 */
+
+
+        /* 任务队列为空，且线程池没有关闭时阻塞在这里 */
+        while((pool->count == 0) && (!pool->shutdown)) {
+            pthread_cond_wait(&(pool->notify), &(pool->lock));
+        }
+
+        /* 关闭的处理 */
+        if((pool->shutdown == immediate_shutdown) ||
+           ((pool->shutdown == graceful_shutdown) &&
+            (pool->count == 0))) {
+            break;
+        }
+
+        /* Grab our task */
+        /* 取得任务队列的第一个任务 */
+        task.function = pool->queue[pool->head].function;
+        task.argument = pool->queue[pool->head].argument;
+        /* 更新 head 和 count */
+        pool->head += 1;
+        pool->head = (pool->head == pool->queue_size) ? 0 : pool->head;
+        pool->count -= 1;
+
+        /* Unlock */
+        /* 释放互斥锁 */
+        pthread_mutex_unlock(&(pool->lock));
+
+        /* Get to work */
+        /* 开始运行任务 */
+        (*(task.function))(task.argument);
+        /* 这里一个任务运行结束 */
+    }
+
+    /* 线程将结束，更新运行线程数 */
+    //pool->started--;
+
+    pthread_mutex_unlock(&(pool->lock));
+goto restart;
+    //pthread_exit(NULL);
+    //return(NULL);
+}
+#endif
 
 int threadpool_destroy(threadpool_t *pool, int flags)
 {
@@ -195,55 +299,3 @@ int threadpool_free(threadpool_t *pool)
 }
 
 
-void *threadpool_thread(void *threadpool)
-{
-    threadpool_t *pool = (threadpool_t *)threadpool;
-    threadpool_task_t task;
-restart:
-    for(;;) {
-        /* Lock must be taken to wait on conditional variable */
-        /* 取得互斥锁资源 */
-        pthread_mutex_lock(&(pool->lock));
-
-        /* Wait on condition variable, check for spurious wakeups.
-           When returning from pthread_cond_wait(), we own the lock. */
-        /* 用 while 是为了在唤醒时重新检查条件 */
-        while((pool->count == 0) && (!pool->shutdown)) {
-            /* 任务队列为空，且线程池没有关闭时阻塞在这里 */
-            pthread_cond_wait(&(pool->notify), &(pool->lock));
-        }
-
-        /* 关闭的处理 */
-        if((pool->shutdown == immediate_shutdown) ||
-           ((pool->shutdown == graceful_shutdown) &&
-            (pool->count == 0))) {
-            break;
-        }
-
-        /* Grab our task */
-        /* 取得任务队列的第一个任务 */
-        task.function = pool->queue[pool->head].function;
-        task.argument = pool->queue[pool->head].argument;
-        /* 更新 head 和 count */
-        pool->head += 1;
-        pool->head = (pool->head == pool->queue_size) ? 0 : pool->head;
-        pool->count -= 1;
-
-        /* Unlock */
-        /* 释放互斥锁 */
-        pthread_mutex_unlock(&(pool->lock));
-
-        /* Get to work */
-        /* 开始运行任务 */
-        (*(task.function))(task.argument);
-        /* 这里一个任务运行结束 */
-    }
-
-    /* 线程将结束，更新运行线程数 */
-    //pool->started--;
-
-    pthread_mutex_unlock(&(pool->lock));
-goto restart;
-    //pthread_exit(NULL);
-    //return(NULL);
-}

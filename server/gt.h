@@ -33,8 +33,15 @@
 #define UDPCLIENT 2
 #define TCPSERV 3
 #define TCPCLIENT 4
+#define SIGNIN 5
+#define SIGNUP 6
 
-int num;
+int num ;
+
+int epollfd;
+//int epollfd = epoll_create(MAX_CONN);   //创建epoll文件描述符
+void (*prequest_func[MAX_CONN])(int);   /* 指向处理请求函数的指针 */
+
 
 /**
  * 线程池关闭的方式
@@ -47,33 +54,67 @@ typedef enum {
 /**
  * 线程池一个任务的定义
  */
-typedef struct {
-    void (*function)(void *);
-    void *argument;
-} threadpool_task_t;
-
-typedef struct requests
+typedef struct 
 {
-    int request_id;
-    int to_fd;
-    int to_username[16];
-    void (*hand_req_func)(void *);
+    void (*function)(int);
+    //void *argument;
+    int argument;
+}threadpool_task_t;
+
+/* 客户请求头部结构体 */
+typedef struct
+{
+    int request_id;                 /* 请求号     */
+    char  to[16];                   /* 消息目的地用户名 */
+    char  from[16];                 /* 消息来源用户名   */
+
 }request_t;
+
+typedef struct 
+{
+    int from_fd;
+    int to_fd;
+    int pipefd[2];
+}handle_request_t;
+
 
 struct friends
 {
-    int fd;
     char username[16];
     char beizhu[20];
 };
+
+/* 在线客户信息结构体 */
 struct clients
 {
-    int fd;                 //socket fd
+    int fd;
     char username[16];      //用户名
     char pickname[20];      //昵称
     struct friends online_friends[20]; //好友
-    request_t *request;
-}clients[MAX_CONN];
+}clients_msg[MAX_CONN];
+
+/* 线程参数 */
+typedef struct
+{
+    int epollfd;
+    int listenfd;    
+    int sockfd;     //发出消息者描述符
+}thread_arg_t;
+
+
+/* 定义错误码 */
+typedef enum {
+    threadpool_invalid        = -1,
+    threadpool_lock_failure   = -2,
+    threadpool_queue_full     = -3,
+    threadpool_shutdown       = -4,
+    threadpool_thread_failure = -5
+} threadpool_error_t;
+
+typedef enum {
+    threadpool_graceful       = 1
+} threadpool_destroy_flags_t;
+
 
 typedef struct threadpool 
 {
@@ -100,33 +141,26 @@ extern void *threadpool_thread(void *);
 
 extern int threadpool_free(threadpool_t *);
 
-
-
-/* 定义错误码 */
-typedef enum {
-    threadpool_invalid        = -1,
-    threadpool_lock_failure   = -2,
-    threadpool_queue_full     = -3,
-    threadpool_shutdown       = -4,
-    threadpool_thread_failure = -5
-} threadpool_error_t;
-
-typedef enum {
-    threadpool_graceful       = 1
-} threadpool_destroy_flags_t;
-
-
 extern threadpool_t *threadpool_create(int , int , int);
 
-extern int threadpool_add(threadpool_t *pool, void (*routine)(void *),void *arg, int flags);
+extern int threadpool_add(threadpool_t *, void (*)(int),int , int );
 
-extern void main_thread_func(int,struct epoll_event *,threadpool_t *,int ); 
+extern void main_thread_func(); 
 
 extern int threadpool_destroy(threadpool_t *pool, int flags);
 
-extern void handle_connection(void *);
+extern void handle_connection(int);
 
 extern void register_epoll_fd(int epollfd,int fd,int oneshot);
+
+extern void handle_read_request(int);
+
+extern void handle_write_request(int);
+
+extern void handle_sign_in(int);
+
+extern void handle_sign_up(int);
+
 struct sockaddr_in serv_addr;
-struct sockaddr_in client_addr;
+//struct sockaddr_in client_addr;
 #endif

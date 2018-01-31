@@ -8,7 +8,7 @@ void register_epoll_fd(int epollfd,int fd,int oneshot)
     event.events = EPOLLIN | EPOLLET;
     if(oneshot)
     {
-        event.events |= EPOLLET;
+        event.events |= EPOLLONESHOT;
     }
     if(epoll_ctl(epollfd,EPOLL_CTL_ADD,fd,&event) == -1) 
     {
