@@ -56,14 +56,6 @@ struct clients
     struct friends online_friends[20]; //好友
 }clients_msg[MAX_CONN];
 
-/* 线程参数 */
-typedef struct
-{
-    int epollfd;
-    int listenfd;    
-    int sockfd;     //发出消息者描述符
-}thread_arg_t;
-
 
 extern int Socket(int);         /* 根据参数创建相应套接字 */
 

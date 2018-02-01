@@ -16,19 +16,9 @@ void main_thread_func()
 
     int listenfd = Socket(TCPSERV);
     open_noblock(listenfd);
-    //Connect_mysql();
-    //int epollfd = epoll_create(MAX_CONN);   //创建epoll文件描述符
     assert(epollfd != -1);
     struct epoll_event ready_fd[MAX_CONN]; //存放epoll_wait返回的可读写事件
 
-
-    /* 线程所需参数结构 */
-    thread_arg_t args;
-    bzero(&args,sizeof(args));
-    args.listenfd = listenfd;
-    args.epollfd = epollfd;
-    
-    
     for(int i = 0;i < MAX_CONN;i++)
     {
         ready_fd[i].data.fd = -1;
