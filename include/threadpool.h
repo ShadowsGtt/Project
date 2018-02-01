@@ -46,16 +46,16 @@ typedef struct threadpool
   int started;              //线程池现有线程数量
 }threadpool_t;
 
-int threadpool_destroy(threadpool_t *pool, int flags);
+extern int threadpool_destroy(threadpool_t *pool, int flags);
 
-void *threadpool_thread(void *);
+extern void *threadpool_thread(void *);
 
-int threadpool_free(threadpool_t *);
+extern int threadpool_free(threadpool_t *);
 
-threadpool_t *threadpool_create(int , int , int);
+extern threadpool_t *threadpool_create(int , int , int);
 
-int threadpool_add(threadpool_t *, void (*)(int),int , int );
+extern int threadpool_add(threadpool_t *, void (*)(int),int , int );
 
-int threadpool_add(threadpool_t *, void (*)(int),int , int );
+extern int threadpool_add(threadpool_t *, void (*)(int),int , int );
 
 #endif

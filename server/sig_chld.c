@@ -1,4 +1,4 @@
-#include "../include/gt.h"
+#include "../include/wechat.h"
 void sig_chld(int signo)        /* 处理信号SIG_CHLD的函数(子进程退出时会发送该信号给父进程) */
 {
     pid_t pid;

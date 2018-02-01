@@ -1,4 +1,4 @@
-#include "../include/gt.h"
+#include "../include/wechat.h"
 int main()
 {
     main_thread_func();
