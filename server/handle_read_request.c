@@ -1,11 +1,10 @@
 
-#include "gt.h"
+#include "../include/gt.h"
 void handle_read_request(int fd)
 {
     int request_id;
     char errobuf[20];
     int n = recv(fd,&request_id,4,0);
-    printf("request_id:%d\n",request_id);
     if(n == -1)
     {
         sprintf(errobuf,"recv fd[%d]",fd);
@@ -15,7 +14,9 @@ void handle_read_request(int fd)
     {
         printf("client close\n");
         close(fd);
+        return;
     }
+    printf("request_id:%d\n",request_id);
     switch(request_id)
     {
         case SIGNIN:

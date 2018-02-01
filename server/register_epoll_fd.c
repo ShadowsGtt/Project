@@ -1,4 +1,4 @@
-#include "gt.h"
+#include "../include/gt.h"
 
 /* 注册epoll事件 */
 void register_epoll_fd(int epollfd,int fd,int oneshot)

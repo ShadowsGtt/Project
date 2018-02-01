@@ -1,5 +1,5 @@
+#include "../include/gt.h"
 
-#include "gt.h"
 int open_noblock(int sockfd)
 {
     int old_option;

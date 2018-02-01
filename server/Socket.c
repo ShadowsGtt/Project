@@ -1,5 +1,4 @@
-
-#include "gt.h"
+#include "../include/gt.h"
 int Socket(int type)   
 {
     struct sockaddr_in client_addr;

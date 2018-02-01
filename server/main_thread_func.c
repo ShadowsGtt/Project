@@ -1,12 +1,16 @@
-#include "gt.h"
+#include "../include/gt.h"
+#include "../include/threadpool.h"
+int pthread_setconcurrency(int);
 
-/* 处理客户连接 */
-//void main_thread_func(struct epoll_event *ready_fd,thread_arg_t *args) 
+
+/* 这里相当于main函数 */
 void main_thread_func() 
 {
 
     printf("main thread start run\n");
     printf("backlog:%d\n",BACKLOG);
+
+    pthread_setconcurrency(6);
 
     epollfd = epoll_create(MAX_CONN);   //创建epoll文件描述符
 
@@ -34,26 +38,27 @@ void main_thread_func()
     register_epoll_fd(epollfd,listenfd,0);
 
     threadpool_t *first_pool = threadpool_create(6,1500,0);
-    //int epollfd = args->epollfd;
-    //int listenfd = args->listenfd;
     while(1)
     {
         int rtnum = epoll_wait(epollfd,ready_fd,MAX_CONN,-1);
         for(int i = 0;i < rtnum;i++)
         {
             int fd = ready_fd[i].data.fd;
+            
             /* 有客户连接 */
+
             if(fd == listenfd )//&& (ready_fd[i].events & EPOLLIN))
             {
                 threadpool_add(first_pool,handle_connection,listenfd,0);
 
             }
-            /* 有客户端发送请求 */
+            
             else if( ready_fd[i].events & EPOLLIN )
             {
                 printf("EPOLLIN\n");
                 threadpool_add(first_pool,handle_read_request,fd,0);
             }
+
             else if(ready_fd[i].events & EPOLLOUT)
             {
                 printf("EPOLLOUT\n");

@@ -1,4 +1,4 @@
-#include "gt.h"
+#include "../include/gt.h"
 
 void handle_connection(int listenfd)
 {

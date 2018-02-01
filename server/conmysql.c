@@ -1,4 +1,4 @@
-#include "wechat.h" 
+#include"../include/gt.h"
 void Connect_mysql()
 {
     MYSQL *conn;
