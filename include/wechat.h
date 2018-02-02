@@ -37,6 +37,7 @@
 
 int num ;
 
+MYSQL *CONN_MYSQL;
 int epollfd;
 void (*prequest_func[MAX_CONN])(int);   /* 指向处理请求函数的指针 */
 

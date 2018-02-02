@@ -14,5 +14,4 @@ void connect_mysql(MYSQL *conn)
         fprintf(stderr,"connect mysql failed:%s\n",mysql_error(conn));
         mysql_close(conn);
     }
-    
 }

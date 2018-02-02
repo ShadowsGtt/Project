@@ -24,7 +24,7 @@ void handle_read_request(int fd)
 
             break;
         case SIGNUP:
-            //prequest_func[fd] = handle_sign_up;
+            prequest_func[fd] = handle_sign_up;
         
             break;
     }

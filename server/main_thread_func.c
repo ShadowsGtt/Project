@@ -1,5 +1,6 @@
 #include "../include/wechat.h"
 #include "../include/threadpool.h"
+#include "../include/database.h"
 int pthread_setconcurrency(int);
 
 
@@ -7,8 +8,16 @@ int pthread_setconcurrency(int);
 void main_thread_func() 
 {
 
-    printf("main thread start run\n");
+    printf("main thread start running\n");
     printf("backlog:%d\n",BACKLOG);
+
+    /* 连接数据库 */
+    MYSQL *CONN_MYSQL;          //数据库连接句柄
+    CONN_MYSQL = mysql_init(NULL);  
+    if (CONN_MYSQL == NULL)  
+        fprintf(stderr,"mysql_init failed!\n"); 
+    connect_mysql(CONN_MYSQL);
+
 
     pthread_setconcurrency(6);
 
@@ -37,7 +46,7 @@ void main_thread_func()
             
             /* 有客户连接 */
 
-            if(fd == listenfd )//&& (ready_fd[i].events & EPOLLIN))
+            if(fd == listenfd )
             {
                 threadpool_add(first_pool,handle_connection,listenfd,0);
 
