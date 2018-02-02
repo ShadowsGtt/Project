@@ -12,8 +12,8 @@ void main_thread_func()
     printf("backlog:%d\n",BACKLOG);
 
     /* 连接数据库 */
-    MYSQL *CONN_MYSQL;          //数据库连接句柄
-    CONN_MYSQL = mysql_init(NULL);  
+    //MYSQL *CONN_MYSQL;          //数据库连接句柄
+    CONN_MYSQL =  mysql_init(NULL);  
     if (CONN_MYSQL == NULL)  
         fprintf(stderr,"mysql_init failed!\n"); 
     connect_mysql(CONN_MYSQL);

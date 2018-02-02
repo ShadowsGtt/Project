@@ -3,7 +3,8 @@
 
 int exc_sql(MYSQL *conn,const char *sql) 
 {
-    int res = mysql_query(conn,sql );
+    printf("int exc_sql\n");
+    int res = mysql_query(conn,sql);
     if (!res) 
     {
         printf("%lu rows affected\n", (unsigned long)mysql_affected_rows(conn));
@@ -14,4 +15,5 @@ int exc_sql(MYSQL *conn,const char *sql)
         fprintf(stderr, "error %d: %s\n", mysql_errno(conn), mysql_error(conn));
         return -1;
     }
+    printf("exit exc_sql\n");
 }

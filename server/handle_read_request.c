@@ -3,10 +3,10 @@
 void handle_read_request(int fd)
 {
     int request_id;
-    char errobuf[20];
     int n = recv(fd,&request_id,4,0);
     if(n == -1)
     {
+        char errobuf[20];
         sprintf(errobuf,"recv fd[%d]",fd);
         perror(errobuf);
     }
