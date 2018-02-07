@@ -1,10 +1,16 @@
 #include "../include/wechat.h"
 
-void sign_up(int fd)
+int sign_up(int fd)
 {
 
-    char reply[100];
+
     char ch;
+
+    struct 
+    {
+        int res;
+        char message[100];
+    }reply;
 
     struct
     {
@@ -18,6 +24,9 @@ void sign_up(int fd)
 
     message.request = SIGNUP;
 
+
+    printf("\n注册时您需要注意一下几点:\n\t1.用户名和密码只能是字母或汉子或下划线\n\
+\t2.姓名由于系统原因暂时不支持汉字\n");
     printf("\n请输出您的用户名:");
     scanf("%s",message.UID);
     while((ch = getchar()) != '\n' && ch != EOF);
@@ -33,9 +42,9 @@ void sign_up(int fd)
     printf("请选择性别：T(boy)  F(girl):");
     while((message.Usex = getchar()) != 'T' && message.Usex !='F' )
     {
+        while((ch = getchar()) != '\n' && ch != EOF);
         printf("输入错误,请重新输入(T or F):");
     }
-    while((ch = getchar()) != '\n' && ch != EOF);
 
     printf("请输入电话号码：");
     scanf("%s",message.PhoneNumber);
@@ -54,7 +63,7 @@ void sign_up(int fd)
     else
     {
         recv(fd,&reply,sizeof(reply),0);
-        fprintf(stdout,"%s",reply);
+        fprintf(stdout,"%s",reply.message);
     }
 
 

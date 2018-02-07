@@ -1,6 +1,4 @@
 #include "../include/wechat.h"
-extern void sign_up(int);
-extern void LoginMenu();
 int main()
 {
     int sockfd = Socket(TCPCLIENT);
@@ -13,6 +11,7 @@ int main()
     switch(select)
     {
         case 1:
+            sign_in(sockfd);
             break;
         case 2:
             sign_up(sockfd); 
