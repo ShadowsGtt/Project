@@ -43,9 +43,12 @@ int sign_in(int fd)
     }
     else
     {
+        /* 输出服务器回馈消息  */
         recv(fd,&reply,sizeof(reply),0);
-        fprintf(stdout,"%s",reply.message);
-        if(reply.res == -1)
+        fprintf(stdout,"\n\033[;31m***********%s***************\033[0m\n",reply.message);
+        if(reply.res == -1)   /* 登录失败,重新输入 */
             sign_in(fd);
     }
+    if(reply.res == 0)
+        return reply.res;
 }

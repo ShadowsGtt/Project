@@ -45,6 +45,24 @@ void LoginMenu();
 
 void get_password(char * const);
 
+void running();
+
+void friend_talk(int);
+
+void group_talk(int);
+
+void main_page(int);
+
+void manage_system(int);
+
+void chat_system(int);
+
+void AllMenu();
+void FriendManageMenu(); //好友管理菜单
+void GroupManageMenu(); //群管理菜单
+void ChatMenu(); //聊天菜单
+void MainMenu();
+
 
 struct sockaddr_in serv_addr;
 #endif

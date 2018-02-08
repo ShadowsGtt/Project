@@ -3,7 +3,7 @@
 int sign_up(int fd)
 {
 
-
+    int res  = -1;  /* return of function */
     char ch;
 
     struct 
@@ -62,10 +62,12 @@ int sign_up(int fd)
     }
     else
     {
+        /* 输出服务器回馈消息  */
         recv(fd,&reply,sizeof(reply),0);
-        fprintf(stdout,"%s",reply.message);
+        fprintf(stdout,"\n\033[;31m**********%s*************\033[0m\n",reply.message);
     }
+    if(reply.res == 0)
+        res = 0;
 
-
-
+    return res;
 }

@@ -22,18 +22,27 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include<sys/select.h>
-#define MAX_USER_MSG  100 //用户最大发送消息大小
+
+
 #define BACKLOG 100
 #define ServPort 40009
 #define MAX_CONN 50000  //服务器最大连接数量
-#define LocalIp "127.0.0.1"
+
 #define ServIp "0.0.0.0"
 #define UDPSERV 1
 #define UDPCLIENT 2
 #define TCPSERV 3
 #define TCPCLIENT 4
+
+/* 客户端请求 */
 #define SIGNIN 5
 #define SIGNUP 6
+#define ADDFRID 7
+#define DELFRID 8
+#define SDMESG 9
+
+
+
 
 int num ;
 

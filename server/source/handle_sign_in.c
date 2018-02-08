@@ -7,13 +7,13 @@ void handle_sign_in(int fd)
     {
         char UID[16];
         char Passwd[16];
-    }mesg={"\0","\0"};
+    }mesg={"\0",{0}};
 
     struct 
     {
         int res;
         char message[100];
-    }replay = {-1,"\0"};
+    }replay = {-1,{0}};
 
     int n = recv(fd,&mesg,sizeof(mesg),0);
     printf("username:%s\n",mesg.UID);
@@ -25,12 +25,12 @@ void handle_sign_in(int fd)
     if( select_result(CONN_MYSQL,sql) == 0)
     {
         replay.res = 0;
-        sprintf(replay.message,"\n登录成功\n");
+        sprintf(replay.message,"登录成功!");
     }
     else
     {
         replay.res = -1;
-        sprintf(replay.message,"\n登录失败!用户名或密码错误\n");
+        sprintf(replay.message,"登录失败!用户名或密码错误!");
     }
 
 

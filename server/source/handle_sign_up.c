@@ -28,12 +28,12 @@ void handle_sign_up(int fd)
     if(exc_sql(CONN_MYSQL,sql) == 0)
     {
         reply.res = 0;
-        sprintf(reply.message,"注册成功!\n");
+        sprintf(reply.message,"注册成功!");
     }
     else
     {   
         reply.res = -1;
-        sprintf(reply.message,"注册失败!该用户名已经被注册!\n");
+        sprintf(reply.message,"注册失败!该用户名已经被注册!");
     }
     n = send(fd,&reply,sizeof(reply),0);
     if(n <= 0)
