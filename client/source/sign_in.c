@@ -19,18 +19,18 @@ int sign_in(int fd)
     message.request = SIGNIN;
 
 
-
-
-
     char ch;
     printf("\n请输出您的用户名:");
     scanf("%s",message.UID);
     while((ch = getchar()) != '\n' && ch != EOF);
 
     printf("请输入密码:");
+    
+    get_password(message.Passwd);
+    /*
     scanf("%s",message.Passwd);
     while((ch = getchar()) != '\n' && ch != EOF);
-
+    */
     int n = send(fd,&message,sizeof(message),0 );
 
     if(n == 0)

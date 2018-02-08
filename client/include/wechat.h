@@ -1,6 +1,7 @@
 #ifndef _GT_H
 #define _GT_H
 #include<netdb.h>
+#include<termios.h>
 #include<wait.h>
 #include<syslog.h>
 #include <poll.h>
@@ -21,7 +22,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include<sys/select.h>
-#include<curses.h>
 #define ServPort 40009
 #define ServIp "127.0.0.1"
 #define UDPCLIENT 2
@@ -42,6 +42,8 @@ int sign_in(int);
 int sign_up(int);
 
 void LoginMenu();
+
+void get_password(char * const);
 
 
 struct sockaddr_in serv_addr;

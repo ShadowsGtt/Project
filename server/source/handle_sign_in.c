@@ -25,7 +25,7 @@ void handle_sign_in(int fd)
     if( select_result(CONN_MYSQL,sql) == 0)
     {
         replay.res = 0;
-        sprintf(replay.message,"登录成功\n");
+        sprintf(replay.message,"\n登录成功\n");
     }
     else
     {

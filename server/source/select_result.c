@@ -2,7 +2,6 @@
 #include "../include/database.h"
 int select_result(MYSQL *conn,const char *sql)
 {
-    printf("\n**********in select_result************\n");
     int ret = -1;
     MYSQL_RES *result; // mysql 记录集
     MYSQL_ROW row;
@@ -21,11 +20,7 @@ int select_result(MYSQL *conn,const char *sql)
     
     result = mysql_store_result(conn);
     if( ( row=mysql_fetch_row(result) ) != NULL  ) 
-    {
-        printf("row:%s,%s\n",row[0],row[1]);
         ret = 0;
-        
-    }
     //while ((row=mysql_fetch_row(result))) // 打印结果集
     //{
         //printf("%s,%s\n",row[0],row[1]);
