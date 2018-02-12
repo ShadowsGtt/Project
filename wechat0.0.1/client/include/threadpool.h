@@ -56,6 +56,4 @@ extern threadpool_t *threadpool_create(int , int , int);
 
 extern int threadpool_add(threadpool_t *, void (*)(int),int , int );
 
-extern int threadpool_add(threadpool_t *, void (*)(int),int , int );
-
 #endif

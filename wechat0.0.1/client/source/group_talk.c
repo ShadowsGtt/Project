@@ -1,3 +1,5 @@
+
+#include "../include/head.h"
 #include "../include/wechat.h"
 
 void group_talk(int fd)

@@ -1,33 +1,15 @@
 #ifndef _GT_H
 #define _GT_H
-#include<netdb.h>
-#include<termios.h>
-#include<wait.h>
-#include<syslog.h>
-#include <poll.h>
-#include<signal.h>
-#include <fcntl.h>
-#include<sys/sendfile.h>
-#include<pthread.h>
-#include<assert.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<errno.h>
-#include<sys/epoll.h>
-#include<string.h>
-#include<sys/types.h>
-#include<netinet/in.h>
-#include<sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include<sys/select.h>
+
 #define ServPort 40009
-#define ServIp "111.230.171.212"
+#define ServIp "127.0.0.1"
+//#define ServIp "111.230.171.212"
 #define UDPCLIENT 2
 #define TCPCLIENT 4
 #define SIGNIN 5
 #define SIGNUP 6
+
+int sockfd;
 
 int Socket(int);         /* 根据参数创建相应套接字 */
 
@@ -57,11 +39,13 @@ void manage_system(int);
 
 void chat_system(int);
 
-void AllMenu();
-void FriendManageMenu(); //好友管理菜单
-void GroupManageMenu(); //群管理菜单
-void ChatMenu(); //聊天菜单
-void MainMenu();
+extern void Connect();
+
+extern void AllMenu();
+extern void FriendManageMenu(); //好友管理菜单
+extern void GroupManageMenu(); //群管理菜单
+extern void ChatMenu(); //聊天菜单
+extern void MainMenu();
 
 
 struct sockaddr_in serv_addr;

@@ -1,3 +1,5 @@
+
+#include "../include/head.h"
 #include "../include/wechat.h"
 
 void main_page(int fd)
@@ -20,6 +22,7 @@ void main_page(int fd)
                 manage_system(fd);
                 break;
             case 3:     /* 退出 */
+                exit(0);
                 break;
             default:
                 printf("\n******************选择错误,请重新选择**************\n");

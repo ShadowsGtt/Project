@@ -1,7 +1,15 @@
+
+#include "../include/head.h"
 #include "../include/wechat.h"
 int main()
 {
-    int sockfd = Socket(TCPCLIENT);
+    //int sockfd = Socket(TCPCLIENT);
+    //sockfd = socket(AF_INET,SOCK_STREAM,0);
+    
+    bzero(&serv_addr,sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(ServPort);
+    inet_pton(AF_INET,ServIp,&serv_addr.sin_addr);
 
     int select;
     char ch;
@@ -19,6 +27,7 @@ int main()
                 sign_up(sockfd); 
                 break;
             case 3:     /* 退出 */
+                exit(0);
                 break;
             default:
                 printf("\n******************选择错误,请重新选择**************\n");

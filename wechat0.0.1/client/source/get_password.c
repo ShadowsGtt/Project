@@ -1,3 +1,5 @@
+
+#include "../include/head.h"
 #include "../include/wechat.h"
 
 void get_password(char* const password)

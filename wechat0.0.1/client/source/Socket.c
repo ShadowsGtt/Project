@@ -1,10 +1,10 @@
+
+#include "../include/head.h"
 #include "../include/wechat.h"
 int Socket(int type)   
 {
-    struct sockaddr_in client_addr;
-    const int on = 1;
     int sockfd;
-    bzero(&client_addr,sizeof(client_addr));
+    const int on = 1;
     bzero(&serv_addr,sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(ServPort);

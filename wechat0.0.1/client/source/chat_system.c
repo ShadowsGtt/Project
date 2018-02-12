@@ -1,3 +1,4 @@
+#include "../include/head.h"
 #include "../include/wechat.h"
 
 void chat_system(int fd)
