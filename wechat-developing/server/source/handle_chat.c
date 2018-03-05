@@ -10,6 +10,7 @@ void handle_chat(int fd)
        int length;
        char src_name[16];
        char dst_name[16];
+       //char mesg[MAXMESGLEN];
     }mesg;
     int n = recv(fd,&mesg,sizeof(mesg),0  );
     if(n == -1)
@@ -25,5 +26,6 @@ void handle_chat(int fd)
     
     /* 消息移动到管道中 */
     splice(pipefd[1],NULL,fd,NULL,32768,0);
-    get_fd_byname(mesg.dst_name);
+    int dst_fd = get_fd_byname(mesg.dst_name);
+    splice(dst_fd,NULL,pipefd[0],NULL,32768,0);
 }

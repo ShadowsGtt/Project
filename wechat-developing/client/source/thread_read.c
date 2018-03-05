@@ -1,6 +1,52 @@
 #include "../include/head.h"
 #include "../include/wechat.h"
 
+/* 接收消息 */
+void * thread_read(void *fileno)
+{
+    int fd = *(int *)fileno;
+    
+    struct 
+    {
+        int type;  //消息类型
+        int length;
+    }mesg;
+    bzero(&mesg,sizeof(mesg));
+    
+    fd_set rset;
+    FD_ZERO(&rset);
+    
+    
+    for( ; ;)
+    {
+        FD_SET(fd,&rset);
+        int res = select(fd+1,&rset,NULL,NULL,NULL);
+        
+        if(res == -1)
+        { 
+            if(errno == EINTR)
+                continue;
+            else
+                perror("select");
+        }
+
+        if(FD_ISSET(fd,&rset))
+        {
+            int n = recv(fd,&mesg,sizeof(mesg),0);
+            switch(mesg.type)
+            {
+                case CHAT:
+                    //recv_mesg(fd);
+                    break;
+            }
+        }
+
+    }
+
+}
+
+
+#if 0
 void * thread_read(void *fileno)
 {
     int fd = *(int *)fileno;
@@ -64,3 +110,4 @@ void * thread_read(void *fileno)
     }
 
 }
+#endif

@@ -13,7 +13,6 @@ void main_thread_func()
     printf("backlog:%d\n",BACKLOG);
 
     /* 连接数据库 */
-    //MYSQL *CONN_MYSQL;          //数据库连接句柄
     CONN_MYSQL =  mysql_init(NULL);  
     if (CONN_MYSQL == NULL)  
         fprintf(stderr,"mysql_init failed!\n"); 
@@ -32,7 +31,7 @@ void main_thread_func()
     for(int i = 0;i < MAX_CONN;i++)
     {
         ready_fd[i].data.fd = -1;
-        clients_msg[i].fd = -1;
+        clients_mesg[i].fd = -1;
     }
 
     register_epoll_fd(epollfd,listenfd,0);

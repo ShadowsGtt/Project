@@ -27,6 +27,7 @@
 #define BACKLOG 100
 #define ServPort 40009
 #define MAX_CONN 50000  //服务器最大连接数量
+#define MAXMESGLEN  100 //用户消息最大长度
 
 #define ServIp "0.0.0.0"
 #define UDPSERV 1
@@ -59,12 +60,12 @@ struct friends
 */
 
 /* 在线客户信息结构体 */
-struct clients
+struct
 {
     int fd;
     char username[16];      //用户名
     char pickname[20];      //昵称
-}clients_msg[MAX_CONN];
+}clients_mesg[MAX_CONN];
 
 
 int Socket(int);         /* 根据参数创建相应套接字 */

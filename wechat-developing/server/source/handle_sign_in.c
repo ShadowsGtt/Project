@@ -3,12 +3,14 @@
 
 void handle_sign_in(int fd)
 {
+    /* 用户登录信息 */
     struct 
     {
         char UID[16];
         char Passwd[16];
     }mesg={"\0",{0}};
 
+    /* 结果应答结构体 */
     struct 
     {
         int res;
@@ -31,6 +33,9 @@ void handle_sign_in(int fd)
         sprintf(replay.message,"登录成功!");
 
         /* 登录成功时保存客户信息 */
+        clients_mesg[fd].fd = fd;
+        strncat(clients_mesg[fd].username,mesg.UID,16);
+        
     }
 
     /* 用户名密码检验失败 */

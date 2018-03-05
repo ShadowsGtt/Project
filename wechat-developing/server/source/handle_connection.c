@@ -19,7 +19,6 @@ void handle_connection(int listenfd)
 
     /* 注册该socketfd可读  */
     register_epoll_fd(epollfd,new_fd,1);
-    clients_msg[new_fd].fd = new_fd;
 
 
 }

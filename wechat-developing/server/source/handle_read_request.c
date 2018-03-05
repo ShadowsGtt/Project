@@ -3,20 +3,32 @@
 void handle_read_request(int fd)
 {
     int request_id;
-    int n = recv(fd,&request_id,4,0);
+    int n = -1;
+
+    /* 提取请求ID */
+    n = recv(fd,&request_id,4,0);
     if(n == -1)
     {
         char errobuf[20];
         sprintf(errobuf,"recv fd[%d]",fd);
         perror(errobuf);
     }
+
+    /* 客户连接断开 */
     if(n == 0)
     {
-        printf("client close\n");
+        printf("client %d close\n",fd);
+
+        clients_mesg[fd].fd = -1;
+        bzero(&clients_mesg[fd].username,16);
+
         close(fd);
         return;
     }
     printf("request_id:%d\n",request_id);
+
+
+    /* 根据请求应答客户 */
     switch(request_id)
     {
         /* 登录 */

@@ -3,5 +3,9 @@
 
 void handle_get_fritab(int fd)
 {
+    struct 
+    {
+        
+    }mesg;
     
 }
