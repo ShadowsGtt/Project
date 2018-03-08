@@ -6,7 +6,7 @@ void handle_read_request(int fd)
     int n = -1;
 
     /* 提取请求ID */
-    n = recv(fd,&request_id,4,0);
+    n = recv(fd,&request_id,4,MSG_PEEK);
     if(n == -1)
     {
         char errobuf[20];
@@ -50,6 +50,12 @@ void handle_read_request(int fd)
         /*　请求好友表 */
         case GETFRITAB:
             prequest_func[fd] = handle_get_fritab;
+            break;
+        case ADDFRI:
+            prequest_func[fd] = handle_add_fri;
+            break;
+        case RADDFRI:
+            prequest_func[fd] = handle_radd_fri;
         
             break;
     }

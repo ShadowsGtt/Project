@@ -6,9 +6,10 @@ void handle_sign_in(int fd)
     /* 用户登录信息 */
     struct 
     {
+        int type;
         char UID[16];
         char Passwd[16];
-    }mesg={"\0",{0}};
+    }mesg={-1,"\0",{0}};
 
     /* 结果应答结构体 */
     struct 
@@ -18,6 +19,8 @@ void handle_sign_in(int fd)
     }replay = {-1,{0}};
 
     int n = recv(fd,&mesg,sizeof(mesg),0);
+    if(n == -1)
+        perror("in handle_sign_in recv");
     printf("username:%s\n",mesg.UID);
     printf("password:%s\n",mesg.Passwd);
 

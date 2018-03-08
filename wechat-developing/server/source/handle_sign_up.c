@@ -5,6 +5,7 @@ void handle_sign_up(int fd)
 {
     struct 
     {
+        int type;
         char UID[16];
         char Uname[16];
         char Passwd[16];

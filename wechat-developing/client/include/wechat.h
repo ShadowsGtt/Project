@@ -12,6 +12,13 @@
 #define SIGNUP 6
 #define CHAT 7
 #define GETFRITAB 8
+#define ADDFRI 9
+
+
+/* 请求结果 */
+#define RADDFRI 50
+
+pthread_t tid;
 
 char username[16];
 
@@ -41,13 +48,21 @@ void running();
 
 void friend_talk(int);
 
+void res_add_friend(int);
+
 void group_talk(int);
 
 void main_page(int);
 
 void manage_system(int);
 
+void recv_add_fri(int);
+
 void chat_system(int);
+
+void recv_fri_mesg(int);
+
+void add_friend(int);
 
 void Connect();
 
@@ -56,6 +71,8 @@ void FriendManageMenu(); //好友管理菜单
 void GroupManageMenu(); //群管理菜单
 void ChatMenu(); //聊天菜单
 void MainMenu();
+void ManageMenu();
+void friend_manage(int);
 
 struct 
 {

@@ -40,6 +40,8 @@
 #define SIGNUP 6
 #define CHAT 7
 #define GETFRITAB 8
+#define ADDFRI 9
+#define RADDFRI 50
 
 
 
@@ -93,6 +95,10 @@ void handle_sign_up(int);
 void handle_chat(int);
 
 void handle_get_fritab(int);
+
+void handle_add_fri(int);
+
+void handle_radd_fri(int);
 
 int get_fd_byname(const char *);
 

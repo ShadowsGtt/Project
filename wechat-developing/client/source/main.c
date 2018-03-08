@@ -36,14 +36,7 @@ int main()
         }
     }while(select > 3 || select < 1 || select == 2);
     
-    /* 接受消息的线程 */
-    pthread_t tid;
-    if(pthread_create(&tid,NULL,thread_read,(void *)&sockfd) != 0 )
-        perror("thread create");
-
-    /* 登录以后*/
-
-    get_fritab(sockfd);
+    //printf("----------below is main_page---------\n");
     main_page(sockfd); 
 
     

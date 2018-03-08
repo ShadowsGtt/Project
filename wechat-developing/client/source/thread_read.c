@@ -6,12 +6,7 @@ void * thread_read(void *fileno)
 {
     int fd = *(int *)fileno;
     
-    struct 
-    {
-        int type;  //消息类型
-        int length;
-    }mesg;
-    bzero(&mesg,sizeof(mesg));
+    int type = -1;  //消息类型
     
     fd_set rset;
     FD_ZERO(&rset);
@@ -32,11 +27,24 @@ void * thread_read(void *fileno)
 
         if(FD_ISSET(fd,&rset))
         {
-            int n = recv(fd,&mesg,sizeof(mesg),0);
-            switch(mesg.type)
+            int n = recv(fd,&type,sizeof(type),0);
+            switch(type)
             {
                 case CHAT:
-                    //recv_mesg(fd);
+                    recv_fri_mesg(fd);
+                    break;
+                case GETFRITAB:
+                    get_fritab(fd);
+                    break;
+                case RADDFRI:
+                    res_add_friend(fd);
+                    break;
+                case ADDFRI:
+                    recv_add_fri(fd);
+                    break;
+                default:
+                    if(n == 0)
+                        exit(0);
                     break;
             }
         }

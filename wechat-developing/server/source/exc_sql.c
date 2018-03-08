@@ -3,7 +3,7 @@
 
 int exc_sql(MYSQL *conn,const char *sql) 
 {
-    printf("int exc_sql\n");
+    printf("--------------------in exc_sql-----------------------\n");
     int res = mysql_query(conn,sql);
     if (!res) 
     {

@@ -97,8 +97,22 @@ int sign_in(int fd)
         /* 登录成功 */
         if(reply.res == 0)
         {
-            main_page(sockfd);
             strcat(username,message.UID);
+
+            /* 启动接受消息的线程 */
+            if(pthread_create(&tid,NULL,thread_read,(void *)&sockfd) != 0 )
+                perror("thread create");
+
+            /* 发送获取好友表请求 */
+
+            int type = GETFRITAB;
+            n = send(sockfd,&type,sizeof(type),0);
+            if(n == -1)
+                perror("send get friend table");
+            fflush(stdout);
+            //main_page(sockfd);
+
+            
             
         }
     }

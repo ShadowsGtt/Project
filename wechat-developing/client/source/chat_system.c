@@ -3,7 +3,8 @@
 
 void chat_system(int fd)
 {
-    int select;
+    //printf("-------in chat_system-------\n");
+    int select = -1;
     char ch;
     do
     {
@@ -14,7 +15,10 @@ void chat_system(int fd)
         switch(select)
         {
             case 1:     /* 群聊天 */
-                group_talk(fd);
+                //group_talk(fd);
+                printf("\033[;31m**********\
+***暂不提供该功能*************** \033[0m");
+                chat_system(fd);
                 break;
             case 2:     /* 好友聊天 */
                 friend_talk(fd);

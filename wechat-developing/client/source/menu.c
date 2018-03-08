@@ -2,6 +2,7 @@
 #include "../include/head.h"
 #include "../include/wechat.h"
 
+void MainMenu();
 void AllMenu();
 void FriendManageMenu(); //好友管理菜单
 void GroupManageMenu(); //群管理菜单
