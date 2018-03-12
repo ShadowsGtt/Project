@@ -7,7 +7,7 @@ int pthread_setconcurrency(int);
 /* 这里相当于main函数 */
 void main_thread_func() 
 {
-    //set_daemon("./server",0);
+    set_daemon("./server",0);
 
     printf("main thread start running\n");
     printf("backlog:%d\n",BACKLOG);
@@ -16,6 +16,8 @@ void main_thread_func()
     CONN_MYSQL =  mysql_init(NULL);  
     if (CONN_MYSQL == NULL)  
         fprintf(stderr,"mysql_init failed!\n"); 
+    int opt = 1;
+    mysql_options(CONN_MYSQL, MYSQL_OPT_RECONNECT, &opt);
     connect_mysql(CONN_MYSQL);
 
 
