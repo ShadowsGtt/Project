@@ -16,7 +16,7 @@ void recv_fri_mesg(int fd)
     if(n == -1)
         perror("recv in recv_fri_mesg");
     printf("\n---------------新消息----------------\n");
-    printf("好友[%s]:%s\n",mesg.dst_name,mesg.mesg);
+    printf("好友[%s]:%s\n",mesg.src_name,mesg.mesg);
     printf("----------------------------------------\n");
     bzero(&mesg,sizeof(mesg));
     

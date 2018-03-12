@@ -6,6 +6,17 @@ void friend_talk(int fd)
 {
     fd = sockfd; 
     //printf("\033[;31m*************暂不提供该功能*************** \033[0m");
+
+
+    /* 发送获取好友表请求 */
+    int n = -1;
+    int type = GETFRITAB;
+    n = send(sockfd,&type,sizeof(type),0);
+    if(n == -1)
+        perror("send get friend table");
+    
+    
+    
     int file_fd;
     char file_name[26];// = "FRIENDTABLE.txt";
     char friend[10][16] = {0};
@@ -24,9 +35,10 @@ void friend_talk(int fd)
     if(file_fd == -1)
         perror("open");
     
-    int n = read(file_fd,friend,32768);
+    n = read(file_fd,friend,32768);
     if(n == -1)
         perror("read in friend_talk");
+    close(file_fd);
 
     if(friend[0][0] == 0)
     {

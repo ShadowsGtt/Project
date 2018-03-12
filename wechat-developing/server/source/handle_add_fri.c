@@ -5,6 +5,7 @@
 /* 好友添加结果 */
 void handle_radd_fri(int fd)
 {
+    printf("------------in radd_fri----------\n");
     int n = -1;
     char sql[200] = {0};
 
@@ -29,6 +30,10 @@ void handle_radd_fri(int fd)
     n = recv(fd,&mesg,sizeof(mesg),0 );
     if(n == -1)
         perror("in reply add friend");
+    //printf("res(y/n):%c\n",mesg.res);
+    printf("mesg.dst_name:%s\n",mesg.dst_name);
+    printf("mesg.src_name:%s\n",mesg.src_name);
+    printf("mesg.res:%c\n",mesg.res);
 
     /* 同意添加好友 */
     if(mesg.res == 'y')
@@ -37,6 +42,7 @@ void handle_radd_fri(int fd)
         bzero(sql,sizeof(sql) );
         sprintf(sql,"insert into Friend(UID,FID) values('%s','%s') ",\
                 mesg.dst_name,mesg.src_name);
+        exc_sql(CONN_MYSQL,sql);
 
         /* 通知主动添加者 */
         int dst_fd = -1;
@@ -99,11 +105,30 @@ void handle_add_fri(int fd)
     if(n == -1)
         perror("recv,get GETFRITAB");
 
+    bzero(sql,sizeof(sql));
     sprintf(sql,"select UID from UserTable where UID='%s'",mesg.dst_name);
     n = select_result(CONN_MYSQL,sql);
     /* 存在目标用户 */
     if(n == 0)
     {
+        /* 如果已经是好友了 */
+        bzero(sql,sizeof(sql));
+        sprintf(sql,"select UID from Friend where (UID='%s' and FID='%s') or \
+                (UID='%s' and FID='%s')",mesg.dst_name,\
+                mesg.src_name,mesg.src_name,mesg.dst_name);
+        n = -1;
+        n = select_result(CONN_MYSQL,sql);
+        if(n == 0)
+        {
+            sprintf(reply.mesg,"[%s]已经是您的好友啦!不用再次添加了~",mesg.dst_name); 
+            n = send(fd,&reply,sizeof(reply),0 );
+            if(n == -1)
+                close(fd);
+            return;
+
+        }
+
+
         /* 通知目标者 */
         int dst_fd = -1;
         dst_fd = get_fd_byname(mesg.dst_name);

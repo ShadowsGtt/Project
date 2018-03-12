@@ -4,17 +4,15 @@
 void get_fritab(int fd)
 {
     int n = -1,file_fd = -2;
-    char file_name[26]; //= "FRIENDTABLE.txt";
+    char file_name[26]={0}; 
     sprintf(file_name,"%sFRITAB.txt",username);
 
-    char friend[10][16];//= {0};
+    char friend[10][16];
     bzero(friend,sizeof(friend));
 
-//char buf[160] = {0};
 
     /* 接收好友表 */
     n = recv(fd,friend,32768,0);
-    //n = recv(fd,buf,32768,0);
     if(n == -1)
         perror("recv in get_fritab");
     
@@ -50,5 +48,6 @@ void get_fritab(int fd)
             perror("write in file");
         k++;
     }
+    fflush( fdopen(file_fd,"w") );
     close(file_fd);
 }

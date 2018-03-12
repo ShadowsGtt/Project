@@ -38,6 +38,8 @@ void res_add_friend(int fd)
     n = recv(fd,res,32767,0);
     if(n == -1)
         perror("in res_add_friend [recv]");
+    if(n == 0)
+        exit(0);
     
     printf("\n---------------新消息-----------------\n");
     printf("%s\n",res);
@@ -63,7 +65,10 @@ void recv_add_fri(int fd)
     printf("\n[%s]添加您为好友(y/n)\n",mesg.src_name);
 
     char sel,ch;
+    sel = 'y';
+    printf("--------------系统已经帮您自动同意--------!\n");
 
+    /*
     while((sel = getchar()) != 'y' && sel != 'n')
     {
         printf("请输入正确的选择!\n");
@@ -71,7 +76,7 @@ void recv_add_fri(int fd)
         sel = getchar();
         while((ch = getchar()) != '\n' && ch != EOF);
 
-    }
+    }*/
     if(sel == 'y')
     {
         struct 
@@ -105,6 +110,14 @@ void recv_add_fri(int fd)
             perror("send in recv_add_fri,add");
         
     }
+    /* 刷新好友表 */
+    sleep(1);
+    n = -1;
+    int type = GETFRITAB;
+    n = send(sockfd,&type,sizeof(type),0);
+    if(n == -1)
+        perror("send get friend table");
+
     printf("---------------------------------------\n");
 }
 
