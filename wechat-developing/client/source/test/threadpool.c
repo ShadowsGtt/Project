@@ -96,6 +96,12 @@ int threadpool_add(threadpool_t *pool, void (*function)(int ),
         pool->count += 1;
         printf("task count:%d\n",pool->count);
 
+            if(pthread_cond_signal(&(pool->notify)) != 0) 
+            {
+                err = threadpool_lock_failure;
+                break;
+            }
+        /*
         if(pool->count == 20)
         for(int k = 0;k < pool->count;k++)
         {
@@ -105,7 +111,8 @@ int threadpool_add(threadpool_t *pool, void (*function)(int ),
                 break;
             }
 
-        }
+        }*/
+
     } while(0);
 
     /* 释放互斥锁资源 */
@@ -128,10 +135,13 @@ void *threadpool_thread(void *threadpool)
         pthread_mutex_lock(&(pool->lock));
         printf("%ld get lock\n",pthread_self());
         /* 线程池开启并且没有任务可以执行,则睡眠 */
-        //while(pool->count == 0 && (!pool->shutdown) )
+        while(pool->count == 0 && (!pool->shutdown) )
+            pthread_cond_wait(&(pool->notify), &(pool->lock));
         
 
         //while(pool->count < 20 && (!pool->shutdown) )
+        
+/*
 wait:pthread_cond_wait(&(pool->notify), &(pool->lock));
             printf("thread:%ld accept signal\n",pthread_self());
             if(pool->count == 0)
@@ -139,8 +149,7 @@ wait:pthread_cond_wait(&(pool->notify), &(pool->lock));
                 printf("count == %d,thread:%ld sleep\n",pool->count,pthread_self());
                 goto wait;
             }
-
-        printf("after wait\n");
+*/
         /* 关闭的处理 */
         if((pool->shutdown == immediate_shutdown) ||
            ((pool->shutdown == graceful_shutdown) &&

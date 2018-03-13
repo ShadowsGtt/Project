@@ -20,9 +20,9 @@ int main()
     serv_addr.sin_port = htons(ServPort);
     inet_pton(AF_INET,ServIp,&serv_addr.sin_addr);
 
-    threadpool_t *pool = threadpool_create(7,1000,0);
+    threadpool_t *pool = threadpool_create(7,10000,0);
     sleep(2);
-    for(int i = 0;i < 21;i++)
+    for(int i = 0;i < 1000;i++)
     {
         int fd = socket(AF_INET,SOCK_STREAM,0);
         if(fd == -1)
@@ -32,7 +32,7 @@ int main()
 
     char ch;
     while( (ch = getchar()) != 'q' );
-    for(int i = 3; i <= 24;i++)
+    for(int i = 3; i <= 1003;i++)
     {
         close(i);
     }
