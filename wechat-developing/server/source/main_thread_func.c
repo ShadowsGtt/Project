@@ -7,7 +7,7 @@ int pthread_setconcurrency(int);
 /* 这里相当于main函数 */
 void main_thread_func() 
 {
-    set_daemon("./server",0);
+    //set_daemon("./server",0);
 
     printf("main thread start running\n");
     printf("backlog:%d\n",BACKLOG);
