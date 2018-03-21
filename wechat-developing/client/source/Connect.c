@@ -2,6 +2,8 @@
 #include "../include/wechat.h"
 void Connect(int fd)
 {
+    char a[] = {'\\','|','-','/'};
+    int i = 0;
     while(1)
     {
         int rrr = -1;
@@ -9,9 +11,17 @@ void Connect(int fd)
         {
             if(errno == ECONNREFUSED)
             {
-                fprintf(stderr,"连接服务器失败,正在重新连接...\n");
-                sleep(1);
+                printf("[%c]",a[i%4]);
+                printf("连接服务器失败,正在重新连接");
+                fflush(stdout);
+                usleep(100000);
+                printf("\x1b[0G\x1b[2K"); /* Clear the line. */
+                
+                i++;
+                if(i == 5)
+                    i = 0;
                 close(sockfd);
+                
                 sockfd = socket(AF_INET,SOCK_STREAM,0);
                 continue;
             }

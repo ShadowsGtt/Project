@@ -32,7 +32,8 @@ int sign_in(int fd)
 
     putchar(10);
     //open_noblock(sockfd);
-    
+    Connect(fd);
+    /*
     while(1)
     {
         int rrr = -1;
@@ -72,6 +73,7 @@ int sign_in(int fd)
             break;
     }
     printf("\n正在登录中...\n");
+    */
 
     int n = send(sockfd,&message,sizeof(message),0 );
 
