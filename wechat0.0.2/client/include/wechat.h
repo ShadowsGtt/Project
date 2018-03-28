@@ -2,8 +2,8 @@
 #define _GT_H
 
 #define ServPort 40009
-//#define ServIp "127.0.0.1"
-#define ServIp "111.230.171.212"
+#define ServIp "127.0.0.1"
+//#define ServIp "111.230.171.212"
 
 #define MAXMESGLEN 100 /* 用户消息长度 */
 
