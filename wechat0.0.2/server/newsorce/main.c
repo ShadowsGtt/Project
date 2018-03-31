@@ -7,6 +7,7 @@ int pthread_setconcurrency(int);
 /* 这里相当于main函数 */
 int main()
 {
+    //signal(SIGSEGV,SIG_IGN);
     //set_daemon("./server",0);
 
     printf("main thread start running\n");
@@ -17,6 +18,10 @@ int main()
     int new_fd;
     int sin_size = sizeof(struct sockaddr_in);
     int listenfd = Socket(TCPSERV);
+    maxfd = 0;
+    bzero(heart_count,sizeof(heart_count));
+    printf("sizeof:%lu\n",sizeof(heart_count));
+
     struct sockaddr_in client_addr;
 
     /* 设置同时可运行的线程数量 */
@@ -44,6 +49,12 @@ int main()
     /* 将listenfd注册到epoll事件中 */
     register_epoll_fd(epoll_fd,listenfd,0);
 
+    /* 创建心跳线程 */
+    pthread_t heart_tid;
+    if(pthread_create((&heart_tid), NULL,heart_beat,NULL) != 0) 
+        perror("thread heart create failed");
+
+    /* 创建工作线程 */
     create_work_thread(COUNT);
     
     int i = 0;

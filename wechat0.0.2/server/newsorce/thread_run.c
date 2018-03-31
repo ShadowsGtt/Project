@@ -3,7 +3,7 @@
 
 void *thread_run(void *th)
 {
-    int fd_num = 0;
+    int fd_counts = 0;
     int self = -1;
     int epoll_fd ;
     pthread_t tid = pthread_self();
@@ -37,23 +37,28 @@ void *thread_run(void *th)
         {
             int fd = ready_fd[i].data.fd;
             
-            /* 有客户连接,将客户fd注册到线程自己的epoll事件中 */
+            /* 收到主线程传输的fd */
             if(fd == pipefd)
             {
                 int read_fd ;
                 int n = read(fd,&read_fd,4);
                 if( n == -1 )
                     perror("pipefd read error");
+                /* 记录fd */
+                sockfd_set[read_fd] = read_fd;
+                if(read_fd > maxfd)
+                    maxfd = read_fd;
 
-                printf("%lu 即将接管fd:%d [总数:%d]\n",tid,read_fd,++fd_num);
+                printf("%lu 即将接管fd:%d [总数:%d]\n",tid,read_fd,++fd_counts);
 
+                /* 注册fd到epoll中 */
                 register_epoll_fd(epoll_fd,read_fd,0);
             }
             else if( ready_fd[i].events & EPOLLIN )
             {
                 /* 解析客户请求 */
-                char buf[100];
-                Recv(fd,buf,100,0);
+                printf("client mesg\n");
+                analysis_head(fd);
             }
             else if(ready_fd[i].events & EPOLLOUT)
             {

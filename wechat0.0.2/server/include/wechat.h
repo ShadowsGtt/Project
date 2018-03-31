@@ -21,7 +21,6 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <sys/stat.h>
-#include<sys/select.h>
 
 
 #define BACKLOG 100
@@ -45,14 +44,21 @@
 #define COUNT 5
 
 
+/* 所有客户fd最大值 */
+unsigned maxfd;
 
-int num ;
+/* 记录所有客户fd */
+unsigned int sockfd_set[MAX_CONN*5];
+
+/* 记录客户端未回心跳的次数 */
+char heart_count[MAX_CONN*5];
 
 MYSQL *CONN_MYSQL;
-int epollfd;
-void (*prequest_func[MAX_CONN])(int);   /* 指向处理请求函数的指针数组 */
+//int epollfd;
+//void (*prequest_func[MAX_CONN])(int);   
+/* 指向处理请求函数的指针数组 */
 
-/* defination of a thread */
+/* 一个线程的定义 */
 typedef struct  
 {
     pthread_t tid;
@@ -60,6 +66,25 @@ typedef struct
 }thread_t;
 
 thread_t thread[COUNT];
+
+/* 消息包头 */
+typedef struct
+{
+    unsigned short  type;
+    unsigned short  length;
+    unsigned int    seq;
+    char            sour;
+    char            dest;
+}mesg_t;
+
+/* 客户请求结果 */
+typedef struct
+{
+    unsigned short  type;
+    unsigned short  length;
+    unsigned int    seq;
+}mesg_res_t;
+
 
 /* 在线客户信息结构体 */
 struct
@@ -70,48 +95,55 @@ struct
 }clients_mesg[MAX_CONN];
 
 
-int Socket(int);         /* 根据参数创建相应套接字 */
+extern int Socket(int);         /* 根据参数创建相应套接字 */
 
-void sig_chld(int);      /* 处理SIG_CHLD信号 */
+extern void sig_chld(int);      /* 处理SIG_CHLD信号 */
 
-int open_noblock(int);   /* 设置文件描述符为非阻塞,返回旧设置 */
+extern int open_noblock(int);   /* 设置文件描述符为非阻塞,返回旧设置 */
 
-int set_daemon(const char*,int); /* 设置当前进程为守护进程,第一个参数为程序名字(argv[0]),第二个是设施,成功返回0  */
+extern int set_daemon(const char*,int); /* 设置当前进程为守护进程,第一个参数为程序名字(argv[0]),第二个是设施,成功返回0  */
 
-void Getsockname(int ,struct sockaddr *,socklen_t *);  //获取内核赋予的ip和端口
+extern void Getsockname(int ,struct sockaddr *,socklen_t *);  //获取内核赋予的ip和端口
 
-void main_thread_func(); 
+extern void main_thread_func(); 
 
-void handle_connection(int);
+extern void handle_connection(int);
 
-void register_epoll_fd(int epollfd,int fd,int oneshot);
+extern void analysis_head(int);
 
-void handle_read_request(int);
+extern void register_epoll_fd(int epollfd,int fd,int oneshot);
 
-void handle_sign_in(int);
+extern void handle_read_request(int);
 
-void handle_sign_up(int);
+extern void handle_sign_in(int);
 
-void handle_chat(int);
+extern void handle_sign_up(int);
 
-void handle_get_fritab(int);
+extern void handle_chat(int);
 
-void handle_add_fri(int);
+extern void handle_get_fritab(int);
 
-void handle_radd_fri(int);
+extern void handle_add_fri(int);
 
-void *thread_run(void *);
+extern void handle_radd_fri(int);
 
-void create_work_thread(int);
+extern void *thread_run(void *);
 
-ssize_t Recv(int,void *,size_t,int);
+extern void create_work_thread(int);
 
-int get_fd_byname(const char *);
+extern ssize_t Recv(int,void *,size_t,int);
 
-ssize_t splice(int fd_in, loff_t *off_in, int fd_out,
+extern ssize_t Send(int,void *,size_t,int);
+
+/* 心跳线程运行的函数 */
+extern void *heart_beat(void *);
+
+extern int get_fd_byname(const char *);
+
+extern ssize_t splice(int fd_in, loff_t *off_in, int fd_out,
                       loff_t *off_out, size_t len, unsigned int flags);
 
-void handle_get_fritab(int);
+extern void handle_get_fritab(int);
 struct sockaddr_in serv_addr;
 //struct sockaddr_in client_addr;
 #endif
