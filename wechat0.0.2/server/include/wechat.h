@@ -1,6 +1,7 @@
 #ifndef _GT_H
 #define _GT_H
 #include<netdb.h>
+#include <hiredis/hiredis.h>
 #include<wait.h>
 #include<syslog.h>
 #include <poll.h>
@@ -54,6 +55,7 @@ unsigned int sockfd_set[MAX_CONN*5];
 char heart_count[MAX_CONN*5];
 
 MYSQL *CONN_MYSQL;
+redisContext *conn_redis;
 //int epollfd;
 //void (*prequest_func[MAX_CONN])(int);   
 /* 指向处理请求函数的指针数组 */
@@ -73,8 +75,8 @@ typedef struct
     unsigned short  type;
     unsigned short  length;
     unsigned int    seq;
-    char            sour;
-    char            dest;
+    char            sour[16];
+    char            dest[16];
 }mesg_t;
 
 /* 客户请求结果 */

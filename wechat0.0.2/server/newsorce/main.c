@@ -30,7 +30,16 @@ int main()
     /* 开启listenfd的非阻塞模式 */
     open_noblock(listenfd);
 
-    /* 连接数据库 */
+    /* 连接redis */
+    conn_redis = redisConnect("127.0.0.1", 6379); //redis server默认端口
+    if (conn_redis != NULL && conn_redis->err) {
+        printf("connect redis error: %s\n", conn_redis->errstr);
+    }
+    else{
+        printf("connect redis success!\n");
+    }
+
+    /* 连接mysql */
     CONN_MYSQL =  mysql_init(NULL);  
     if (CONN_MYSQL == NULL)  
         fprintf(stderr,"mysql_init failed!\n"); 
