@@ -51,7 +51,8 @@ void main_thread_func()
             if(fd == listenfd )
             {
                 /* 主线程将新连接注册到epoll事件中 */
-                threadpool_add(first_pool,handle_connection,listenfd,0);
+                handle_connection(listenfd);
+                //threadpool_add(first_pool,handle_connection,listenfd,0);
             }
             
             else if( ready_fd[i].events & EPOLLIN )

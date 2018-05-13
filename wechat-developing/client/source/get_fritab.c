@@ -48,7 +48,7 @@ void get_fritab(int fd)
             perror("write in file");
         k++;
     }
-    fflush( fdopen(file_fd,"w") );
+    //fflush( fdopen(file_fd,"w") );
     fsync(file_fd);
     close(file_fd);
 }
