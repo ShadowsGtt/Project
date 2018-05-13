@@ -33,10 +33,10 @@ int main()
     /* 连接redis */
     conn_redis = redisConnect("127.0.0.1", 6379); //redis server默认端口
     if (conn_redis != NULL && conn_redis->err) {
-        printf("connect redis error: %s\n", conn_redis->errstr);
+        //printf("connect redis error: %s\n", conn_redis->errstr);
     }
     else{
-        printf("connect redis success!\n");
+        //printf("connect redis success!\n");
     }
 
     /* 连接mysql */

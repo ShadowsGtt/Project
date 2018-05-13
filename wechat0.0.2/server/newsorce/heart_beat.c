@@ -18,6 +18,7 @@ void *heart_beat(void *ag)
                     close(i);
                     printf("%d 15s not response,is closed\n",i); 
                     sockfd_set[i] = 0;
+                    heart_count[i] = 0;
                     continue;
                 }
                 Send(i,&ht,1,0);
