@@ -26,10 +26,11 @@ time_wheel::~time_wheel()
 
 void func(client_data *client)
 {
-    printf("定时器已到期,正在处理相应事件......\n");
+    printf("调用回调函数,正在处理相应事件......\n");
 
 }
-tw_timer* time_wheel::add_timer(int timeout,client_data *cli)
+tw_timer* time_wheel::add_timer(int timeout,client_data *data,
+                               void (*callback)(client_data *))
 {
     if (timeout < 0)
         return NULL;
@@ -48,8 +49,8 @@ tw_timer* time_wheel::add_timer(int timeout,client_data *cli)
     tw_timer *timer = new tw_timer(rotation, ts);
     //如果槽为空，则它新定时器插入，并设置为该槽的头节点
     
-    timer->user_data = cli;
-    timer->cb_func = func;    //定时器到期之后执行的处理函数
+    timer->user_data = data;
+    timer->callback_func = callback;    //定时器到期之后执行的处理函数
     if (!slots[ts]) {
         printf("新定时器:%d 分 %d 秒 ,秒钟所在位置: %d\n",rotation, ts, cur_slot);
         slots[ts] = timer;
@@ -66,6 +67,7 @@ tw_timer* time_wheel::add_timer(int timeout,client_data *cli)
 
 void time_wheel::del_timer(tw_timer *timer)
 {
+    printf("in del_timer\n");
     if (!timer)
         return;
 
@@ -101,28 +103,12 @@ void time_wheel::tick()
            tmp = tmp->next;
        }
        else {
-           tmp->cb_func(tmp->user_data);
-           if (tmp == slots[cur_slot]) {
-               printf("delete header in cur_slot\n");
-               slots[cur_slot] = tmp->next;
 
-               delete tmp;
-
-               if (slots[cur_slot])
-                   slots[cur_slot]->prev = NULL;
-
-               tmp = slots[cur_slot];
-           }
-           else {
-               tmp->prev->next = tmp->next;
-               if (tmp->next)
-                   tmp->next->prev = tmp->prev;
-
-               tw_timer *tmp2 = tmp->next;
-
-               delete tmp;
-               tmp = tmp2; 
-           }
+           printf("定时器到时,即将调用回调函数\n");
+           tmp->callback_func(tmp->user_data);
+           tw_timer *tmp2 = tmp->next;
+           del_timer(tmp);
+           tmp = tmp2;
        }
    }
 
@@ -156,11 +142,11 @@ int main()
 
     sleep(10);
     printf("wake up\n");
-    wheel.add_timer(8,&client);
-    wheel.add_timer(20,&client);
-    wheel.add_timer(15,&client);
-    wheel.add_timer(13,&client);
-    wheel.add_timer(8,&client);
-    wheel.add_timer(8,&client);
+    wheel.add_timer(8,&client,func);
+    wheel.add_timer(20,&client,func);
+    wheel.add_timer(15,&client,func);
+    wheel.add_timer(13,&client,func);
+    wheel.add_timer(8,&client,func);
+    wheel.add_timer(8,&client,func);
     while(1);
 }

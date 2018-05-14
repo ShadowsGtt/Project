@@ -29,7 +29,7 @@ public:
     int rotation;                       //定时器在时间轮上转多少圈后生效
     int time_slot;                      //定时器属于时间轮上的哪个槽
 
-    void (*cb_func)(client_data*);      //定时器的回调函数
+    void (*callback_func)(client_data*);      //定时器的回调函数
     client_data *user_data;             //客户端数据
     
     tw_timer *prev;                     //指向上一个定时器
@@ -43,7 +43,8 @@ public:
     time_wheel();
     ~time_wheel();
 
-    tw_timer* add_timer(int timeout ,client_data *);   //根据定时值创建定时器，并插入合适的位置
+    tw_timer* add_timer(int timeout ,client_data *,
+            void (*callback_func)(client_data *));   //根据定时值创建定时器，并插入合适的位置
     void del_timer(tw_timer *timer);    //删除目标定时器
     void tick();                //时间到后调用该函数，时间轮向前滚动一个槽间隔
     
