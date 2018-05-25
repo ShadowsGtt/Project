@@ -160,7 +160,7 @@ void TimeWheelStartRunning(time_wheel_t *wheel)
     printf("time wheel start running.....\n");
 
     pthread_t tid;
-    if( !pthread_create(&tid,NULL,TimeWheelThread,(void*)wheel) )
+    if( pthread_create(&tid,NULL,TimeWheelThread,(void*)wheel) )
     {
         printf("time wheel running failed\n");
         perror("error mesg");
