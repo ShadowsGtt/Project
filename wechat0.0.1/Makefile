@@ -1,5 +1,5 @@
 CC := gcc
-LIBDIR := -L/usr/libmysql -lhiredis
+LIBDIR := -L/usr/libmysql
 LIB := -lpthread -lmysqlclient
 IDIR := -I/usr/include/mysql
 
