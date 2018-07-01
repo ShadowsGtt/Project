@@ -1,6 +1,6 @@
-CC := gcc
-LIBDIR := -L/usr/libmysql -lhiredis
-LIB := -lpthread -lmysqlclient
+CC := gcc 
+LIBDIR := -L/usr/libmysql 
+LIB := -lpthread -lmysqlclient -lhiredis 
 IDIR := -I/usr/include/mysql
 
 serv_src := $(wildcard ./server/source/*.c)

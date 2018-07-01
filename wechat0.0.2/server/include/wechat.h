@@ -6,7 +6,7 @@
 #include<syslog.h>
 #include <poll.h>
 #include<signal.h>
-#include<mysql.h>
+#include<mysql/mysql.h>
 #include <fcntl.h>
 #include<sys/sendfile.h>
 #include<pthread.h>
@@ -141,6 +141,8 @@ extern ssize_t Send(int,void *,size_t,int);
 extern void *heart_beat(void *);
 
 extern int get_fd_byname(const char *);
+
+extern void main_thread_event_loop(int);
 
 extern ssize_t splice(int fd_in, loff_t *off_in, int fd_out,
                       loff_t *off_out, size_t len, unsigned int flags);
