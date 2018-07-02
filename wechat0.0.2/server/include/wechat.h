@@ -1,5 +1,5 @@
-#ifndef _GT_H
-#define _GT_H
+#ifndef _WECHAT_H
+#define _WECHAT_H
 #include<netdb.h>
 #include <hiredis/hiredis.h>
 #include<wait.h>
@@ -25,11 +25,11 @@
 
 
 #define BACKLOG 100
-#define ServPort 40009
+//#define ServPort 40009
 #define MAX_CONN 50000  //服务器最大连接数量
 #define MAXMESGLEN  100 //用户消息最大长度
 
-#define ServIp "0.0.0.0"
+//#define ServIp "0.0.0.0"
 #define UDPSERV 1
 #define UDPCLIENT 2
 #define TCPSERV 3

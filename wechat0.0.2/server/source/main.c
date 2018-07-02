@@ -1,19 +1,32 @@
 #include "../include/wechat.h"
+#include "../include/config.h"
 #include "../include/threadpool.h"
 #include "../include/database.h"
 int pthread_setconcurrency(int);
 
 
 /* 这里相当于main函数 */
-int main()
+int main(int argc,char *argv[])
 {
     //signal(SIGSEGV,SIG_IGN);
-    //set_daemon("./server",0);
 
     printf("main thread start running\n");
-    printf("backlog:%d\n",BACKLOG);
+    printf("reading config...\n");
+    if(argc == 1){
+        if(ReadConfig(NULL,1))
+            exit(-1);
+    }
+    else
+        if(ReadConfig(argv[1],argc))
+            exit(-1);
 
-    int opt = 1;
+    printf("config :\n");
+    printf("ip :%s\n",config.ip);
+    printf("port :%d\n",config.port);
+    printf("max-conn :%d\n",config.max_conn);
+    printf("daemon :%s\n",config.daemon == 1 ? "yes":"no");
+    if(config.daemon)
+        set_daemon("./server",0);
 
 
 
@@ -34,6 +47,8 @@ int main()
     CONN_MYSQL =  mysql_init(NULL);  
     if (CONN_MYSQL == NULL)  
         fprintf(stderr,"mysql_init failed!\n"); 
+
+    int opt = 1;
     mysql_options(CONN_MYSQL, MYSQL_OPT_RECONNECT, &opt);
     connect_mysql(CONN_MYSQL);
 
