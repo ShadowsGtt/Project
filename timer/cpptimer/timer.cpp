@@ -142,11 +142,11 @@ int main()
 
     sleep(10);
     printf("wake up\n");
-    wheel.add_timer(8,&client,func);
-    wheel.add_timer(20,&client,func);
-    wheel.add_timer(15,&client,func);
-    wheel.add_timer(13,&client,func);
-    wheel.add_timer(8,&client,func);
-    wheel.add_timer(8,&client,func);
+    wheel.add_timer(60,&client,func);
+    //wheel.add_timer(20,&client,func);
+    //wheel.add_timer(15,&client,func);
+    //wheel.add_timer(13,&client,func);
+    //wheel.add_timer(8,&client,func);
+    //wheel.add_timer(8,&client,func);
     while(1);
 }

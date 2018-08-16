@@ -15,5 +15,5 @@ int main()
     tw->add_timer(tw,10,callback_func,&data);
     tw->add_timer(tw,70,callback_func,&data);
     tw->add_timer(tw,60,callback_func,&data);
-    while(1);
+    pthread_join(g_tid, NULL);
 }

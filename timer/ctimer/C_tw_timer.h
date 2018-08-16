@@ -30,6 +30,8 @@
 
 #define TIME_WHEEL_AUTO_RUN
 #define BUFFER_SIZE 64
+pthread_t g_tid;
+
 //客户端数据
 typedef struct tw_timer tw_timer_t;
 typedef struct time_wheel time_wheel_t;

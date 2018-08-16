@@ -166,6 +166,7 @@ void TimeWheelStartRunning(time_wheel_t *wheel)
         perror("error mesg");
         return ;
     }
+    g_tid = tid;
 }
 void *TimeWheelThread(void *arg)
 {
@@ -175,7 +176,7 @@ void *TimeWheelThread(void *arg)
     {
         val.tv_sec = 1;
         val.tv_usec = 0;
-        int res = select(1,NULL,NULL,NULL,&val);
+        int res = select(0,NULL,NULL,NULL,&val);
         if(!res)
             wheel->tick(wheel);
     }
