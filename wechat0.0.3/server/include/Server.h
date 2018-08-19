@@ -10,6 +10,19 @@
 
 #include "allHead.h"
 
+using namespace stdexcept;
+
+struct Client
+{
+    int SockFd;
+    string UserName;
+    string GroupId;
+    string NickName;
+    sockaddr_in ClientAddr;
+
+    Client(int fd = -1){}
+    
+};
 
 class Server
 {
@@ -23,16 +36,27 @@ public:
         }
         return _Server;
     }
-    map<string,string> &getServConfig()
-    {
-        return this->_servConfig;
-    }
+    map<string,string> &getServConfig(){ return this->_servConfig; }
+    void Listen();
+    void EventLoop();
 private:
     static Server *_Server;
-    Server(){}
+    Server()
+    {
+        _ListenFd = -1;
+        memset(&_ServAddr,0,sizeof(_ServAddr));
+    }
+    ~Server(){
+        delete _Server;
+    }
 
 private:
     map<string,string> _servConfig;
+    //vector<string> _ConfigComment;
+    sockaddr_in _ServAddr;
+    int _ListenFd;
+    hash_map<string,Client> ClientMesg;
+    
 };
 
 #endif

@@ -34,6 +34,10 @@
 #include<map>
 #include<set>
 #include<bitset>
+#include<cstring>
+#include <hash_map>
+using std::map;
+
 
 using namespace std;
 

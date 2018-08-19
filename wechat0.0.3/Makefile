@@ -1,4 +1,4 @@
-CC := g++
+CC = g++ 
 LIBDIR := -L/usr/libmysql 
 LIB := -lpthread -lmysqlclient -lhiredis 
 IDIR := -I/usr/include/mysql
@@ -13,11 +13,11 @@ cli_obj := $(patsubst %.cpp,%.o,$(cli_src))
 all: serv #cli
 
 serv : $(serv_obj)
-	$(CC) $^ $(LIBDIR) -o $@ $(LIB)
+	$(CC) -std=c++11 $^ $(LIBDIR) -o $@ $(LIB)
 cli : $(cli_obj)
 	$(CC) $^ $(LIBDIR) -o $@ $(LIB)
 %.o:%.c
-	$(CC) -c $^ $(IDIR)  -o $@
+	$(CC) -c -std=c++11 $^ $(IDIR)  -o $@
 
 
 .PHONY:clean
