@@ -2,11 +2,29 @@
 
 void Epoll::EpollCreate()
 {
-    _EpollFd = epoll_create(65536);
+    _EpollFd = epoll_create(MAX_EPOLL_EVENT);
     if(_EpollFd == -1 ){
         perror("epoll create error");
         exit(-1);
     }
+}
+
+void Epoll::EpollWait()
+{
+    epoll_event ReadEvent[MAX_EPOLL_EVENT];
+
+    int ready = epoll_wait(_EpollFd,ReadEvent,MAX_EPOLL_EVENT,_Timeout);
+    
+    if(!ready){
+        _isTimeout = true;
+        return;
+    }
+
+    for(int i = 0;i < ready;++i)
+    {
+        _ReadyEpEvent.push_back(ReadEvent[i]);
+    }
+    
 }
 
 void Epoll::EpollAdd(int fd,int epev)

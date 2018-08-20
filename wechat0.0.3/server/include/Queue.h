@@ -1,6 +1,5 @@
 #ifndef _QUEUE_H
 #define _QUEUE_H
-#pragma once 
 #include <stdint.h>
 #include <vector>
 

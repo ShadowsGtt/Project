@@ -1,23 +1,25 @@
 CC = g++ 
-LIBDIR := -L/usr/libmysql 
-LIB := -lpthread -lmysqlclient -lhiredis 
-IDIR := -I/usr/include/mysql
+LIBDIR = -L/usr/libmysql 
+LIB = -lpthread -lmysqlclient -lhiredis 
+IDIR = -I/usr/include/mysql
+WFLAG = -Wno-deprecated -std=c++11
 
-serv_src := $(wildcard ./server/src/*.cpp)
-cli_src := $(wildcard ./client/src/*.cpp)
+serv_src = $(wildcard ./server/src/*.cpp)
+cli_src = $(wildcard ./client/src/*.cpp)
 
-serv_obj := $(patsubst %.cpp,%.o,$(serv_src))
-cli_obj := $(patsubst %.cpp,%.o,$(cli_src))
+#serv_obj = $(patsubst %.cpp,%.o,${wildcard ./server/src/*.cpp})
+serv_obj = $(patsubst %.cpp,%.o,$(serv_src))
+cli_obj = $(patsubst %.cpp,%.o,$(cli_src))
 
 .PHONY : all
 all: serv #cli
 
 serv : $(serv_obj)
-	$(CC) -std=c++11 $^ $(LIBDIR) -o $@ $(LIB)
+	$(CC) $^ $(LIBDIR) -o $@ $(LIB)
 cli : $(cli_obj)
 	$(CC) $^ $(LIBDIR) -o $@ $(LIB)
 %.o:%.c
-	$(CC) -c -std=c++11 $^ $(IDIR)  -o $@
+	$(CC) -c $^ $(WFLAG) $(IDIR)  -o $@ 
 
 
 .PHONY:clean

@@ -5,14 +5,14 @@
 #include<wait.h>
 #include<syslog.h>
 #include <poll.h>
-#include<signal.h>
+#include<csignal>
 #include<mysql/mysql.h>
 #include <fcntl.h>
 #include<sys/sendfile.h>
 #include<pthread.h>
-#include<assert.h>
-#include<stdio.h>
-#include<stdlib.h>
+#include<cassert>
+#include<cstdio>
+#include<cstdlib>
 #include<errno.h>
 #include<sys/epoll.h>
 #include<cstring>
@@ -35,8 +35,11 @@
 #include<set>
 #include<bitset>
 #include<cstring>
-#include <hash_map>
-using std::map;
+#include <ext/hash_map>
+#include <ext/hash_set>
+
+
+using namespace __gnu_cxx;
 
 
 using namespace std;

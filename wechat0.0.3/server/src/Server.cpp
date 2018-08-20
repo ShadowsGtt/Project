@@ -4,7 +4,7 @@
 	> Mail  : 1025814447@qq.com
 	> Time  : 2018年08月16日 星期四 11时42分35秒
  ************************************************************************/
- #include "../include/Server.h"
+#include "../include/Server.h"
 #include "../include/ReadConfig.h"
 #include "../include/ThreadPool.h"
 
@@ -43,10 +43,14 @@ void Server::Listen()
 
 }
 
-void Server::EventLoop()
+void Server::Loop()
 {
+    _Ep = new Epoll(); 
+    _Ep->EpollCreate();
+    
     while(true)
     {
+        
         
     }
 }

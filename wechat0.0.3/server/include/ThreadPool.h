@@ -1,9 +1,6 @@
 #ifndef _THREADPOOL_H
 #define _THREADPOOL_H
-#pragma once
 #include "../include/allHead.h"
-#include <pthread.h>
-#include <stdio.h>
 #include "Queue.h"
 const int NO_CURRENT_LEADER=0;
 struct Job

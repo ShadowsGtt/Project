@@ -9,9 +9,10 @@
 #define _SERVER_H
 
 #include "allHead.h"
+#include "Epoll.h"
 
-using namespace stdexcept;
 
+class Epoll;
 struct Client
 {
     int SockFd;
@@ -38,13 +39,14 @@ public:
     }
     map<string,string> &getServConfig(){ return this->_servConfig; }
     void Listen();
-    void EventLoop();
+    void Loop();
 private:
     static Server *_Server;
     Server()
     {
         _ListenFd = -1;
         memset(&_ServAddr,0,sizeof(_ServAddr));
+        _Ep = NULL;
     }
     ~Server(){
         delete _Server;
@@ -56,6 +58,7 @@ private:
     sockaddr_in _ServAddr;
     int _ListenFd;
     hash_map<string,Client> ClientMesg;
+    Epoll *_Ep;
     
 };
 
